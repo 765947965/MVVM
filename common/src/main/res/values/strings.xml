@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">common</string>
+    <string name="networkUnavailable">网络不可用</string>
+    <string name="point">提示</string>
+    <string name="unknownMistake">未知错误</string>
+    <string name="permissionPromptBefore">应用将要获取您的拍照、存储空间的读写权限，以提供良好的使用体验！</string>
+    <string name="permissionPrompt">APP需要存储空间读写权限才能正常运行，请允许权限！</string>
+    <string name="cancel">取消</string>
+    <string name="determine">确定</string>
+    <string name="denyPermission">您已拒绝软件所需必要权限，请前往设置开启权限！</string>
+    <string name="permissionCamera">扫码需要相机权限，请允许权限!</string>
+    <string name="denyPermissionCamera">您已拒绝扫码所需必要权限，请前往设置开启权限！</string>
+</resources>

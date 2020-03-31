@@ -1,0 +1,3 @@
+rootProject.name='HuikeFace'
+include ':app'
+include ':common'

@@ -1,0 +1,53 @@
+import java.nio.file.Files
+
+//修改输出的APK名称
+android.applicationVariants.all { variant ->
+    variant.outputs.all { output ->
+        def outputFile = output.outputFile
+        if (outputFile != null && outputFile.name.endsWith('.apk')) {
+            def fileName = "${variant.name}_v${android.defaultConfig.versionName}.apk"
+            outputFileName = fileName
+        }
+    }
+}
+
+//复制mapping及APK
+tasks.whenTaskAdded {
+    task ->
+        def taskName = task.name
+        if (taskName.startsWith('assemble')
+                && (taskName.endsWith('Release') || taskName.endsWith('Debug') || taskName.endsWith('Leak'))) {
+            task.doLast {
+                def nowTime = releaseTime()
+                def flavorsName = taskName.replace('assemble', '')
+                flavorsName = (new StringBuilder()).append(Character.toLowerCase(flavorsName.charAt(0))).append(flavorsName.substring(1)).toString()
+                def separatorName
+                if (taskName.endsWith('Release')) {
+                    separatorName = 'Release'
+                } else if (taskName.endsWith('Debug')) {
+                    separatorName = 'Debug'
+                } else {
+                    separatorName = 'NOTYPE'
+                }
+                def providerName = flavorsName.replace(separatorName, '')
+                def outParentFile = new File(project.projectDir.absolutePath + File.separator + providerName + File.separator + separatorName.toLowerCase())
+                def oldApk = new File(outParentFile.absolutePath, flavorsName + '_v' + android.defaultConfig.versionName + '.apk')
+                def newApk = new File(outParentFile.absolutePath, flavorsName + '_' + nowTime + '_v' + android.defaultConfig.versionName + '.apk')
+                def oldMappingFile = new File(project.buildDir, 'outputs' + File.separator + 'mapping' + File.separator
+                        + providerName + File.separator + separatorName.toLowerCase() + File.separator + 'mapping.txt')
+                def newMappingFile = new File(outParentFile.absolutePath, flavorsName + '_' + nowTime + '_v' + android.defaultConfig.versionName + '_' + oldMappingFile.getName())
+                if (oldApk.exists()) {
+                    // 重命名APK
+                    oldApk.renameTo(newApk)
+                    if (oldMappingFile.exists()) {
+                        // 复制mapping
+                        Files.copy(oldMappingFile.toPath(), newMappingFile.toPath())
+                    }
+                }
+            }
+        }
+}
+
+static def releaseTime() {
+    return new Date().format("(MMdd-HHmm)", TimeZone.getTimeZone("GMT+8"))
+}

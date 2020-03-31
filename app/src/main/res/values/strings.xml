@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">慧科人脸识别</string>
+    <string name="pleaseLogInFirst">请先登录</string>
+    <string name="userNotLoggedIn">用户未登录</string>
+    <string name="activatedSuccessfully">激活成功</string>
+    <string name="activationFailsMessage">激活失败，错误码:%d，错误消息:%s</string>
+</resources>
